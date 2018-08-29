@@ -24,7 +24,6 @@ class VisionObjectRecognitionViewController: ViewController {
     // Vision parts
     private var requests = [VNRequest]()
     
-    public var image = UIImage()
     
     @discardableResult
     func setupVision() -> NSError? {

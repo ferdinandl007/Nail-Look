@@ -10,17 +10,26 @@ import UIKit
 import AVFoundation
 import Vision
 
-class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDelegate {
+class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDelegate ,UICollectionViewDataSource, UICollectionViewDelegate {
+  
+    
     
     var bufferSize: CGSize = .zero
     var rootLayer: CALayer! = nil
     
+    @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak  var previewView: UIView!
     private let session = AVCaptureSession()
     private var previewLayer: AVCaptureVideoPreviewLayer! = nil
     private let videoDataOutput = AVCaptureVideoDataOutput()
     
     private let videoDataOutputQueue = DispatchQueue(label: "VideoDataOutput", qos: .userInitiated, attributes: [], autoreleaseFrequency: .workItem)
+    
+    
+    private let images = [imageOpjet(image: "image", name: "Barrys"),imageOpjet(image: "barer", name: "barer"),imageOpjet(image: "baterflay", name: "baterflay"),imageOpjet(image: "flauer", name: "flauer"),imageOpjet(image: "galaxy", name: "galaxy"),imageOpjet(image: "game", name: "game")]
+    
+    
+    public var image = UIImage()
     
     func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
         // to be implemented in the subclass
@@ -100,8 +109,57 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
     }
     
     func captureOutput(_ captureOutput: AVCaptureOutput, didDrop didDropSampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
-        // print("frame dropped")
+         //print("frame dropped")
     }
+    
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return images.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "collectionViewCell", for: indexPath) as! CollectionViewCell
+        
+        let image = UIImage(named: images[indexPath.row].image)
+        let label = images[indexPath.row].name
+        
+        cell.displayContent(image: image!, title: label)
+        
+        cell.layer.cornerRadius = 13
+
+        return cell
+    }
+    
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        // handle tap events
+        print("You selected cell #\(indexPath.item)!")
+        image = UIImage(named: images[indexPath.row].image)!
+    }
+
+    
+    // change background color when user touches cell
+    func collectionView(_ collectionView: UICollectionView, didHighlightItemAt indexPath: IndexPath) {
+        let cell = collectionView.cellForItem(at: indexPath)
+        cell?.backgroundColor = UIColor.white.withAlphaComponent(0.4)
+        
+    }
+    
+    /*
+    // change background color back when user releases touch
+    func collectionView(_ collectionView: UICollectionView, didUnhighlightItemAt indexPath: IndexPath) {
+        let cell = collectionView.cellForItem(at: indexPath)
+        cell?.backgroundColor = UIColor.clear
+    }
+    */
+    
+    func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
+        // When user deselects the cell
+        let cell = collectionView.cellForItem(at: indexPath)
+        cell?.backgroundColor = UIColor.clear
+    }
+    
+    
     
     public func exifOrientationFromDeviceOrientation() -> CGImagePropertyOrientation {
         let curDeviceOrientation = UIDevice.current.orientation

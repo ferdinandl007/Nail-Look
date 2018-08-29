@@ -17,6 +17,7 @@
 		B18E635E2134FB8A008470DC /* VisionObjectRecognitionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B18E635D2134FB8A008470DC /* VisionObjectRecognitionViewController.swift */; };
 		B18E63602134FB9F008470DC /* MyCustomObjectDetector.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = B18E635F2134FB9F008470DC /* MyCustomObjectDetector.mlmodel */; };
 		B18E636221350104008470DC /* TableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B18E636121350104008470DC /* TableViewController.swift */; };
+		B18E636421363706008470DC /* CollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B18E636321363706008470DC /* CollectionViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,6 +54,7 @@
 		B18E635D2134FB8A008470DC /* VisionObjectRecognitionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VisionObjectRecognitionViewController.swift; sourceTree = "<group>"; };
 		B18E635F2134FB9F008470DC /* MyCustomObjectDetector.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = MyCustomObjectDetector.mlmodel; sourceTree = "<group>"; };
 		B18E636121350104008470DC /* TableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewController.swift; sourceTree = "<group>"; };
+		B18E636321363706008470DC /* CollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -105,6 +107,7 @@
 			children = (
 				B18E632F2134FB3D008470DC /* AppDelegate.swift */,
 				B18E63312134FB3D008470DC /* ViewController.swift */,
+				B18E636321363706008470DC /* CollectionViewCell.swift */,
 				B18E635D2134FB8A008470DC /* VisionObjectRecognitionViewController.swift */,
 				B18E63332134FB3D008470DC /* Main.storyboard */,
 				B18E636121350104008470DC /* TableViewController.swift */,
@@ -267,6 +270,7 @@
 			files = (
 				B18E63602134FB9F008470DC /* MyCustomObjectDetector.mlmodel in Sources */,
 				B18E635E2134FB8A008470DC /* VisionObjectRecognitionViewController.swift in Sources */,
+				B18E636421363706008470DC /* CollectionViewCell.swift in Sources */,
 				B18E63322134FB3D008470DC /* ViewController.swift in Sources */,
 				B18E636221350104008470DC /* TableViewController.swift in Sources */,
 				B18E63302134FB3D008470DC /* AppDelegate.swift in Sources */,
