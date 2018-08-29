@@ -14,6 +14,9 @@
 		B18E633A2134FB3F008470DC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B18E63382134FB3F008470DC /* LaunchScreen.storyboard */; };
 		B18E63452134FB3F008470DC /* Nail_LookTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B18E63442134FB3F008470DC /* Nail_LookTests.swift */; };
 		B18E63502134FB3F008470DC /* Nail_LookUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B18E634F2134FB3F008470DC /* Nail_LookUITests.swift */; };
+		B18E635E2134FB8A008470DC /* VisionObjectRecognitionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B18E635D2134FB8A008470DC /* VisionObjectRecognitionViewController.swift */; };
+		B18E63602134FB9F008470DC /* MyCustomObjectDetector.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = B18E635F2134FB9F008470DC /* MyCustomObjectDetector.mlmodel */; };
+		B18E636221350104008470DC /* TableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B18E636121350104008470DC /* TableViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -47,6 +50,9 @@
 		B18E634B2134FB3F008470DC /* Nail LookUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Nail LookUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B18E634F2134FB3F008470DC /* Nail_LookUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Nail_LookUITests.swift; sourceTree = "<group>"; };
 		B18E63512134FB3F008470DC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B18E635D2134FB8A008470DC /* VisionObjectRecognitionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VisionObjectRecognitionViewController.swift; sourceTree = "<group>"; };
+		B18E635F2134FB9F008470DC /* MyCustomObjectDetector.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = MyCustomObjectDetector.mlmodel; sourceTree = "<group>"; };
+		B18E636121350104008470DC /* TableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -99,8 +105,11 @@
 			children = (
 				B18E632F2134FB3D008470DC /* AppDelegate.swift */,
 				B18E63312134FB3D008470DC /* ViewController.swift */,
+				B18E635D2134FB8A008470DC /* VisionObjectRecognitionViewController.swift */,
 				B18E63332134FB3D008470DC /* Main.storyboard */,
+				B18E636121350104008470DC /* TableViewController.swift */,
 				B18E63362134FB3F008470DC /* Assets.xcassets */,
+				B18E635F2134FB9F008470DC /* MyCustomObjectDetector.mlmodel */,
 				B18E63382134FB3F008470DC /* LaunchScreen.storyboard */,
 				B18E633B2134FB3F008470DC /* Info.plist */,
 			);
@@ -256,7 +265,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B18E63602134FB9F008470DC /* MyCustomObjectDetector.mlmodel in Sources */,
+				B18E635E2134FB8A008470DC /* VisionObjectRecognitionViewController.swift in Sources */,
 				B18E63322134FB3D008470DC /* ViewController.swift in Sources */,
+				B18E636221350104008470DC /* TableViewController.swift in Sources */,
 				B18E63302134FB3D008470DC /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
