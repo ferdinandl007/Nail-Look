@@ -16,8 +16,11 @@
 		B18E63502134FB3F008470DC /* Nail_LookUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B18E634F2134FB3F008470DC /* Nail_LookUITests.swift */; };
 		B18E635E2134FB8A008470DC /* VisionObjectRecognitionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B18E635D2134FB8A008470DC /* VisionObjectRecognitionViewController.swift */; };
 		B18E63602134FB9F008470DC /* MyCustomObjectDetector.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = B18E635F2134FB9F008470DC /* MyCustomObjectDetector.mlmodel */; };
-		B18E636221350104008470DC /* TableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B18E636121350104008470DC /* TableViewController.swift */; };
 		B18E636421363706008470DC /* CollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B18E636321363706008470DC /* CollectionViewCell.swift */; };
+		B18E636621369714008470DC /* extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B18E636521369714008470DC /* extensions.swift */; };
+		B18E636821369DC0008470DC /* ShereViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B18E636721369DC0008470DC /* ShereViewController.swift */; };
+		B18E636A2136B158008470DC /* styleImageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B18E63692136B158008470DC /* styleImageCell.swift */; };
+		B18E636C21378CBF008470DC /* StarryStyle.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = B18E636B21378CBF008470DC /* StarryStyle.mlmodel */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,8 +56,11 @@
 		B18E63512134FB3F008470DC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B18E635D2134FB8A008470DC /* VisionObjectRecognitionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VisionObjectRecognitionViewController.swift; sourceTree = "<group>"; };
 		B18E635F2134FB9F008470DC /* MyCustomObjectDetector.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = MyCustomObjectDetector.mlmodel; sourceTree = "<group>"; };
-		B18E636121350104008470DC /* TableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewController.swift; sourceTree = "<group>"; };
 		B18E636321363706008470DC /* CollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewCell.swift; sourceTree = "<group>"; };
+		B18E636521369714008470DC /* extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = extensions.swift; sourceTree = "<group>"; };
+		B18E636721369DC0008470DC /* ShereViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShereViewController.swift; sourceTree = "<group>"; };
+		B18E63692136B158008470DC /* styleImageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = styleImageCell.swift; sourceTree = "<group>"; };
+		B18E636B21378CBF008470DC /* StarryStyle.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = StarryStyle.mlmodel; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -108,11 +114,14 @@
 				B18E632F2134FB3D008470DC /* AppDelegate.swift */,
 				B18E63312134FB3D008470DC /* ViewController.swift */,
 				B18E636321363706008470DC /* CollectionViewCell.swift */,
+				B18E63692136B158008470DC /* styleImageCell.swift */,
 				B18E635D2134FB8A008470DC /* VisionObjectRecognitionViewController.swift */,
+				B18E636721369DC0008470DC /* ShereViewController.swift */,
+				B18E636521369714008470DC /* extensions.swift */,
 				B18E63332134FB3D008470DC /* Main.storyboard */,
-				B18E636121350104008470DC /* TableViewController.swift */,
 				B18E63362134FB3F008470DC /* Assets.xcassets */,
 				B18E635F2134FB9F008470DC /* MyCustomObjectDetector.mlmodel */,
+				B18E636B21378CBF008470DC /* StarryStyle.mlmodel */,
 				B18E63382134FB3F008470DC /* LaunchScreen.storyboard */,
 				B18E633B2134FB3F008470DC /* Info.plist */,
 			);
@@ -270,9 +279,12 @@
 			files = (
 				B18E63602134FB9F008470DC /* MyCustomObjectDetector.mlmodel in Sources */,
 				B18E635E2134FB8A008470DC /* VisionObjectRecognitionViewController.swift in Sources */,
+				B18E636C21378CBF008470DC /* StarryStyle.mlmodel in Sources */,
+				B18E636821369DC0008470DC /* ShereViewController.swift in Sources */,
+				B18E636A2136B158008470DC /* styleImageCell.swift in Sources */,
 				B18E636421363706008470DC /* CollectionViewCell.swift in Sources */,
+				B18E636621369714008470DC /* extensions.swift in Sources */,
 				B18E63322134FB3D008470DC /* ViewController.swift in Sources */,
-				B18E636221350104008470DC /* TableViewController.swift in Sources */,
 				B18E63302134FB3D008470DC /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

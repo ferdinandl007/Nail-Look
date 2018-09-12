@@ -16,6 +16,30 @@ extension CGFloat {
     }
 }
 
+extension UIImage {
+    func rotate(radians: CGFloat) -> UIImage {
+        let rotatedSize = CGRect(origin: .zero, size: size)
+            .applying(CGAffineTransform(rotationAngle: CGFloat(radians)))
+            .integral.size
+        UIGraphicsBeginImageContext(rotatedSize)
+        if let context = UIGraphicsGetCurrentContext() {
+            let origin = CGPoint(x: rotatedSize.width / 2.0,
+                                 y: rotatedSize.height / 2.0)
+            context.translateBy(x: origin.x, y: origin.y)
+            context.rotate(by: radians)
+            draw(in: CGRect(x: -origin.x, y: -origin.y,
+                            width: size.width, height: size.height))
+            let rotatedImage = UIGraphicsGetImageFromCurrentImageContext()
+            UIGraphicsEndImageContext()
+            
+            return rotatedImage ?? self
+        }
+        
+        return self
+    }
+}
+
+
 
 class VisionObjectRecognitionViewController: ViewController {
     
@@ -24,6 +48,12 @@ class VisionObjectRecognitionViewController: ViewController {
     // Vision parts
     private var requests = [VNRequest]()
     
+    // iBuffer halls pixel sample data to then be processed into final image for sharing!
+    private var iBuffer: CMSampleBuffer!
+    
+    // to determine if the torches on
+    private var torch = 1
+   
     
     @discardableResult
     func setupVision() -> NSError? {
@@ -48,6 +78,8 @@ class VisionObjectRecognitionViewController: ViewController {
         return error
     }
     
+    let lll = CALayer()
+    
     func drawVisionRequestResults(_ results: [Any]) {
         CATransaction.begin()
         CATransaction.setValue(kCFBooleanTrue, forKey: kCATransactionDisableActions)
@@ -61,12 +93,14 @@ class VisionObjectRecognitionViewController: ViewController {
             
             if topLabelObservation.confidence > 0.8 {
             let objectBounds = VNImageRectForNormalizedRect(objectObservation.boundingBox, Int(bufferSize.width), Int(bufferSize.height))
-            
+                
             let shapeLayer = self.createRoundedRectLayerWithBounds(objectBounds)
             
            // let textLayer = self.createTextSubLayerInBounds(objectBounds,identifier: topLabelObservation.identifier,confidence: topLabelObservation.confidence)
 //            shapeLayer.addSublayer(textLayer)
             detectionOverlay.addSublayer(shapeLayer)
+                
+                
             }
         }
         self.updateLayerGeometry()
@@ -77,7 +111,7 @@ class VisionObjectRecognitionViewController: ViewController {
         guard let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else {
             return
         }
-        
+        iBuffer = sampleBuffer
         let exifOrientation = exifOrientationFromDeviceOrientation()
         
         let imageRequestHandler = VNImageRequestHandler(cvPixelBuffer: pixelBuffer, orientation: exifOrientation, options: [:])
@@ -88,20 +122,47 @@ class VisionObjectRecognitionViewController: ViewController {
         }
     }
     
-    @IBAction func backe(_ sender: Any) {
-        self.dismiss(animated: true, completion: nil)
+    
+    func getImageFromSampleBuffer(sampleBuffer: CMSampleBuffer) ->UIImage? {
+        guard let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else {
+            return nil
+        }
+        CVPixelBufferLockBaseAddress(pixelBuffer, .readOnly)
+        let baseAddress = CVPixelBufferGetBaseAddress(pixelBuffer)
+        let width = CVPixelBufferGetWidth(pixelBuffer)
+        let height = CVPixelBufferGetHeight(pixelBuffer)
+        let bytesPerRow = CVPixelBufferGetBytesPerRow(pixelBuffer)
+        let colorSpace = CGColorSpaceCreateDeviceRGB()
+        let bitmapInfo = CGBitmapInfo(rawValue: CGImageAlphaInfo.premultipliedFirst.rawValue | CGBitmapInfo.byteOrder32Little.rawValue)
+        guard let context = CGContext(data: baseAddress, width: width, height: height, bitsPerComponent: 8, bytesPerRow: bytesPerRow, space: colorSpace, bitmapInfo: bitmapInfo.rawValue) else {
+            return nil
+        }
+        guard let cgImage = context.makeImage() else {
+            return nil
+        }
+        let image = UIImage(cgImage: cgImage, scale: 1, orientation:.right)
+        CVPixelBufferUnlockBaseAddress(pixelBuffer, .readOnly)
+        return image
     }
     
     
-    func gesturesRecognizer(){
+
+    @IBAction func torchButton(_ sender: Any) {
         
-        
-        
+        if torch == 1 {
+            device.setTorch(intensity: 1.0)
+            torch = 0
+        } else {
+            device.setTorch(intensity: 0)
+            torch = 1
+        }
         
     }
+    
+    
+    
     override func setupAVCapture() {
         super.setupAVCapture()
-        
         // setup Vision parts
         setupLayers()
         updateLayerGeometry()
@@ -122,6 +183,7 @@ class VisionObjectRecognitionViewController: ViewController {
         rootLayer.addSublayer(detectionOverlay)
     }
     
+    // updates the layer to be relative to Image Layer
     func updateLayerGeometry() {
         let bounds = rootLayer.bounds
         var scale: CGFloat
@@ -132,20 +194,21 @@ class VisionObjectRecognitionViewController: ViewController {
         if scale.isInfinite {
             scale = 1.0
         }
+        
         CATransaction.begin()
         CATransaction.setValue(kCFBooleanTrue, forKey: kCATransactionDisableActions)
         
         // rotate the layer into screen orientation and scale and mirror
         detectionOverlay.setAffineTransform(CGAffineTransform(rotationAngle: CGFloat(.pi / 2.0)).scaledBy(x: scale, y: -scale))
+        
         // center the layer
-        
         detectionOverlay.position = CGPoint (x: bounds.midX, y: bounds.midY - (bounds.height / 9.7))
-        
-        
+    
         CATransaction.commit()
         
     }
     
+    // config as textLayer to Display prediction results only use for development
     func createTextSubLayerInBounds(_ bounds: CGRect, identifier: String, confidence: VNConfidence) -> CATextLayer {
         let textLayer = CATextLayer()
         textLayer.name = "Object Label"
@@ -164,6 +227,7 @@ class VisionObjectRecognitionViewController: ViewController {
         return textLayer
     }
     
+    // configures fingernail image layer
     func createRoundedRectLayerWithBounds(_ bounds: CGRect) -> CALayer {
         let shapeLayer = CALayer()
         shapeLayer.bounds = bounds
@@ -179,16 +243,41 @@ class VisionObjectRecognitionViewController: ViewController {
     
     @IBAction func cameraButton(_ sender: Any) {
         //Create the UIImage
-        UIGraphicsBeginImageContextWithOptions(view.frame.size, true, 0)
+        
+        
+        let newSize = CGSize(width: 480, height: 640 )
+        guard let im = getImageFromSampleBuffer(sampleBuffer: iBuffer) else { return }
+        
+        
+        UIGraphicsBeginImageContextWithOptions(view.frame.size, false, 0)
+        
         guard let context = UIGraphicsGetCurrentContext() else { return }
-        view.layer.render(in: context)
+        rootLayer.contents = im.rotate(radians: CGFloat((.pi / 0.5))).cgImage
+        rootLayer.contentsGravity = CALayerContentsGravity.resizeAspectFill
+        rootLayer.render(in: context)
+        
+        
         guard let image = UIGraphicsGetImageFromCurrentImageContext() else { return }
-        UIGraphicsEndImageContext()
         //Save it to the camera roll
-        UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil)
+        
+        
+
+        im.draw(in: CGRect(origin: CGPoint.zero, size: newSize ))
+        image.draw(in: CGRect(origin: CGPoint.zero, size: newSize))
+
+         UIGraphicsEndImageContext()
+        device.setTorch(intensity: 0)
+        finalImage = image.crop(to: CGSize(width: 480, height: 480))
+        self.performSegue(withIdentifier: "go!", sender: nil)
+        
+        
+        
         
     }
 }
+
+
+
 
 
 

@@ -10,6 +10,11 @@ import UIKit
 import AVFoundation
 import Vision
 
+struct imageOpjet {
+    var image: String
+    var name: String
+}
+
 class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDelegate ,UICollectionViewDataSource, UICollectionViewDelegate {
   
     
@@ -22,6 +27,9 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
     private let session = AVCaptureSession()
     private var previewLayer: AVCaptureVideoPreviewLayer! = nil
     private let videoDataOutput = AVCaptureVideoDataOutput()
+    var device: AVCaptureDevice!
+   
+
     
     private let videoDataOutputQueue = DispatchQueue(label: "VideoDataOutput", qos: .userInitiated, attributes: [], autoreleaseFrequency: .workItem)
     
@@ -30,6 +38,7 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
     
     
     public var image = UIImage()
+    public var finalImage = UIImage()
     
     func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
         // to be implemented in the subclass
@@ -48,6 +57,7 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
     func setupAVCapture() {
         var deviceInput: AVCaptureDeviceInput!
         
+        device = AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: .unspecified)
         // Select a video device, make an input
         let videoDevice = AVCaptureDevice.DiscoverySession(deviceTypes: [.builtInWideAngleCamera], mediaType: .video, position: .back).devices.first
         do {
@@ -71,7 +81,7 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
             session.addOutput(videoDataOutput)
             // Add a video data output
             videoDataOutput.alwaysDiscardsLateVideoFrames = true
-            videoDataOutput.videoSettings = [kCVPixelBufferPixelFormatTypeKey as String: Int(kCVPixelFormatType_420YpCbCr8BiPlanarFullRange)]
+            videoDataOutput.videoSettings = [kCVPixelBufferPixelFormatTypeKey as String: Int(kCVPixelFormatType_32BGRA)]
             videoDataOutput.setSampleBufferDelegate(self, queue: videoDataOutputQueue)
         } else {
             print("Could not add video data output to the session")
@@ -90,6 +100,7 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
         } catch {
             print(error)
         }
+
         session.commitConfiguration()
         previewLayer = AVCaptureVideoPreviewLayer(session: session)
         previewLayer.videoGravity = AVLayerVideoGravity.resizeAspectFill
@@ -124,15 +135,15 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
         let label = images[indexPath.row].name
         
         cell.displayContent(image: image!, title: label)
-        
-        cell.layer.cornerRadius = 13
 
+        cell.layer.cornerRadius = 10
+        
         return cell
     }
     
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        // handle tap events
+        // sets fingernail to layer image var
         print("You selected cell #\(indexPath.item)!")
         image = UIImage(named: images[indexPath.row].image)!
     }
@@ -140,22 +151,31 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
     
     // change background color when user touches cell
     func collectionView(_ collectionView: UICollectionView, didHighlightItemAt indexPath: IndexPath) {
-        let cell = collectionView.cellForItem(at: indexPath)
-        cell?.backgroundColor = UIColor.white.withAlphaComponent(0.4)
+        UIView.animate(withDuration: 0.1) {
+            if let cell = collectionView.cellForItem(at: indexPath) as? CollectionViewCell {
+                
+                cell.transform = .init(scaleX: 0.95, y: 0.95)
+                cell.backgroundColor = UIColor.white.withAlphaComponent(0.1)
+            }
+        }
         
     }
     
-    /*
+    
     // change background color back when user releases touch
     func collectionView(_ collectionView: UICollectionView, didUnhighlightItemAt indexPath: IndexPath) {
-        let cell = collectionView.cellForItem(at: indexPath)
-        cell?.backgroundColor = UIColor.clear
+        UIView.animate(withDuration: 0.5) {
+            if let cell = collectionView.cellForItem(at: indexPath) as? CollectionViewCell {
+                cell.transform = .identity
+                
+            }
+        }
     }
-    */
+    
     
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
         // When user deselects the cell
-        let cell = collectionView.cellForItem(at: indexPath)
+        let cell = collectionView.cellForItem(at: indexPath) 
         cell?.backgroundColor = UIColor.clear
     }
     
@@ -179,5 +199,20 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
         }
         return exifOrientation
     }
+    
+    
+    // In a storyboard-based application, you will often want to do a little preparation before navigation
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        // Get the new view controller using segue.destination.
+        // Pass the selected object to the new view controller.
+        let controller =  (segue.destination as! ShereViewController)
+        controller.image = finalImage
+        
+    
+    }
+    
+    
+
+    
 }
 
